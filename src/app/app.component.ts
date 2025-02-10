@@ -1,38 +1,61 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { HighchartsChartModule } from 'highcharts-angular';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HighchartsChartModule],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  template: `<div #chartContainer style="width: 100%; height: 400px;"></div>`,
 })
-export class AppComponent {
-  title = 'lol-stats';
+export class AppComponent implements AfterViewInit {
+  @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
 
-  // Highcharts properties
-  Highcharts: typeof Highcharts = Highcharts;
-  chartOptions: Highcharts.Options = {
-    title: {
-      text: 'Highcharts Example in Standalone Component',
-    },
-    xAxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    },
-    yAxis: {
+  ngAfterViewInit() {
+    const chartOptions: Highcharts.Options = {
+      chart: {
+        type: 'column',
+      },
       title: {
-        text: 'Values',
+        text: 'Corn vs wheat estimated production for 2023',
       },
-    },
-    series: [
-      {
-        type: 'line',
-        name: 'Sample Data',
-        data: [10, 20, 30, 40, 50, 60],
+      subtitle: {
+        text: 'Source: <a target="_blank" href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>',
       },
-    ],
-  };
+      xAxis: {
+        categories: ['USA', 'China', 'Brazil', 'EU', 'Argentina', 'India'],
+        crosshair: true,
+        accessibility: {
+          description: 'Countries',
+        },
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: '1000 metric tons (MT)',
+        },
+      },
+      tooltip: {
+        valueSuffix: ' (1000 MT)',
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0,
+        },
+      },
+      series: [
+        {
+          type: 'column',
+          name: 'Corn',
+          data: [387749, 280000, 129000, 64300, 54000, 34300],
+        },
+        {
+          type: 'column',
+          name: 'Wheat',
+          data: [45321, 140000, 10000, 140500, 19500, 113500],
+        },
+      ],
+    };
+
+    Highcharts.chart(this.chartContainer.nativeElement, chartOptions);
+  }
 }
