@@ -1,0 +1,182 @@
+<div class="dataviz-container">
+  <h1>Analyse des facteurs de victoire dans League of Legends</h1>
+
+  <div *ngIf="loading" class="loading">
+    <p>Chargement des données en cours...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <p>Erreur lors du chargement des données. Veuillez réessayer.</p>
+  </div>
+
+  <div *ngIf="!loading && !error" class="charts-container">
+    <div
+      class="analysis-summary"
+      *ngIf="significantFactors && significantFactors.length > 0"
+    >
+      <h2>Résumé de l'analyse ({{ gamesAnalyzed }} parties)</h2>
+      <p>
+        D'après l'analyse de {{ gamesAnalyzed }} parties, les facteurs les plus
+        déterminants pour la victoire sont :
+      </p>
+      <ol>
+        <li *ngFor="let factor of significantFactors.slice(0, 3)">
+          <strong>{{ factor.factor }}</strong> (score:
+          {{ factor.score.toFixed(2) }}, taux de victoire:
+          {{ (factor.winRate * 100).toFixed(0) }}%)
+        </li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h2>Impact des positions</h2>
+      <p>
+        Analyse de l'importance relative des différentes positions (top, jungle,
+        mid, adc, support) dans la victoire
+      </p>
+
+      <div class="chart-row">
+        <div class="chart" id="position-impact-chart"></div>
+        <div class="chart" id="position-breakdown-chart"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Items avec le meilleur taux de victoire</h2>
+      <p>
+        Analyse des 30 objets ayant le meilleur taux de victoire dans les
+        parties (objets apparaissant dans au moins 10 parties)
+      </p>
+
+      <div class="chart-row">
+        <div class="chart" id="item-win-rate-chart"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Facteurs de victoire</h2>
+      <div class="chart-row">
+        <div class="chart" id="winning-factors-chart"></div>
+        <div class="chart" id="win-rate-factors-chart"></div>
+      </div>
+
+      <div class="chart-row">
+        <div class="chart" id="victory-ratios-chart"></div>
+        <div class="chart" id="kda-difference-chart"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Statistiques d'équipe</h2>
+      <div class="chart-row">
+        <div class="chart" id="objectives-radar"></div>
+        <div class="chart" id="damage-gold-chart"></div>
+      </div>
+
+      <div class="chart-row">
+        <div class="chart" id="kda-vision-chart"></div>
+      </div>
+    </div>
+
+    <div class="team-stats" *ngIf="winningTeam && losingTeam">
+      <h2>Statistiques moyennes par équipe</h2>
+      <div class="teams-container">
+        <div class="team winning-team">
+          <h3>{{ winningTeam.name }}</h3>
+          <ul>
+            <li>Kills: {{ winningTeam.totalKills }}</li>
+            <li>Morts: {{ winningTeam.totalDeaths }}</li>
+            <li>Assists: {{ winningTeam.totalAssists }}</li>
+            <li>Or: {{ winningTeam.totalGoldEarned | number }}</li>
+            <li>
+              Dégâts aux champions:
+              {{ winningTeam.totalDamageToChamp | number }}
+            </li>
+            <li>Dégâts subis: {{ winningTeam.totalDamageTaken | number }}</li>
+            <li>Score de vision: {{ winningTeam.totalVisionScore }}</li>
+            <li>Tours: {{ winningTeam.towerKills }}</li>
+            <li>Dragons: {{ winningTeam.dragonKills }}</li>
+            <li>Baron: {{ winningTeam.baronKills }}</li>
+            <li>Herald: {{ winningTeam.riftHeraldKills }}</li>
+            <li>Inhibiteurs: {{ winningTeam.inhibitorKills }}</li>
+          </ul>
+        </div>
+
+        <div class="team losing-team">
+          <h3>{{ losingTeam.name }}</h3>
+          <ul>
+            <li>Kills: {{ losingTeam.totalKills }}</li>
+            <li>Morts: {{ losingTeam.totalDeaths }}</li>
+            <li>Assists: {{ losingTeam.totalAssists }}</li>
+            <li>Or: {{ losingTeam.totalGoldEarned | number }}</li>
+            <li>
+              Dégâts aux champions: {{ losingTeam.totalDamageToChamp | number }}
+            </li>
+            <li>Dégâts subis: {{ losingTeam.totalDamageTaken | number }}</li>
+            <li>Score de vision: {{ losingTeam.totalVisionScore }}</li>
+            <li>Tours: {{ losingTeam.towerKills }}</li>
+            <li>Dragons: {{ losingTeam.dragonKills }}</li>
+            <li>Baron: {{ losingTeam.baronKills }}</li>
+            <li>Herald: {{ losingTeam.riftHeraldKills }}</li>
+            <li>Inhibiteurs: {{ losingTeam.inhibitorKills }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="conclusion"
+      *ngIf="significantFactors && significantFactors.length >= 3"
+    >
+      <h2>Conclusion</h2>
+      <p>
+        L'analyse des {{ gamesAnalyzed }} parties montre que les facteurs les
+        plus déterminants pour la victoire sont :
+        <strong>{{ significantFactors[0].factor }}</strong
+        >, <strong>{{ significantFactors[1].factor }}</strong
+        >, et <strong>{{ significantFactors[2].factor }}</strong
+        >.
+      </p>
+      <p>
+        Les équipes gagnantes ont tendance à avoir un avantage significatif en
+        termes de {{ significantFactors[0].factor.toLowerCase() }} ({{
+          (significantFactors[0].winRate * 100).toFixed(0)
+        }}% des cas), ce qui en fait le facteur le plus important pour prédire
+        la victoire.
+      </p>
+      <p *ngIf="positionImpacts && positionImpacts.length > 0">
+        Concernant les positions,
+        <strong>{{ translatePosition(positionImpacts[0].position) }}</strong> a
+        le plus d'impact dans le jeu, suivi par
+        <strong>{{ translatePosition(positionImpacts[1].position) }}</strong
+        >. Le rôle de
+        <strong>{{ translatePosition(positionImpacts[0].position) }}</strong>
+        est particulièrement important pour
+        {{ getTopContribution(positionImpacts[0]) }}.
+      </p>
+
+      <p *ngIf="topItems && topItems.length > 0">
+        Notre analyse des objets montre que
+        <strong>{{ formatItemName(topItems[0].itemName) }}</strong> est l'item
+        avec le meilleur taux de victoire ({{
+          (topItems[0].winRate * 100).toFixed(1)
+        }}%), suivi par
+        <strong>{{ formatItemName(topItems[1].itemName) }}</strong> ({{
+          (topItems[1].winRate * 100).toFixed(1)
+        }}%). Ces items ont été utilisés dans {{ topItems[0].winCount }} et
+        {{ topItems[1].winCount }} parties gagnantes respectivement, sur un
+        total de {{ topItems[0].totalOccurrences }} et
+        {{ topItems[1].totalOccurrences }} apparitions dans notre jeu de
+        données. La présence de ces objets dans l'inventaire d'un joueur semble
+        donc fortement corrélée avec la victoire.
+      </p>
+
+      <p>
+        Les graphiques ci-dessus montrent l'importance relative de différents
+        facteurs dans la victoire d'une équipe en analysant les écarts de
+        performance entre l'équipe gagnante et l'équipe perdante sur de
+        multiples parties.
+      </p>
+    </div>
+  </div>
+</div>

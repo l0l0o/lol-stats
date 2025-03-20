@@ -1,13 +1,16 @@
-<main class="main">
-  <div style="width: 80%; margin: auto">
-    <h1>hello</h1>
-    <highcharts-chart
-      [Highcharts]="highcharts"
-      [options]="chartOptions"
-      style="width: 100%; height: 400px; display: block"
+<mat-toolbar color="primary">
+  <span>League of Legends Stats</span>
+  <span class="spacer"></span>
+  <nav>
+    <a mat-button routerLink="/dataviz" routerLinkActive="active"
+      >Statistiques</a
     >
-    </highcharts-chart>
-  </div>
-</main>
+    <a mat-button routerLink="/csv-viewer" routerLinkActive="active"
+      >Données brutes</a
+    >
+  </nav>
+</mat-toolbar>
 
-<router-outlet />
+<main class="container mt-4">
+  <router-outlet></router-outlet>
+</main>

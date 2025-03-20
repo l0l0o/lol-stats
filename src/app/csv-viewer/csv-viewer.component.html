@@ -1,0 +1,68 @@
+<mat-card class="csv-viewer-container">
+  <mat-card-header>
+    <mat-card-title>Données League of Legends</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+    <mat-card *ngIf="error" class="error">
+      <mat-card-content>
+        <p>Une erreur s'est produite lors du chargement des données CSV.</p>
+        <p>
+          Vérifiez que le fichier "league-data.csv" existe bien dans le dossier
+          "src/assets" et que le serveur Angular a été redémarré.
+        </p>
+        <button mat-raised-button color="warn" (click)="reloadData()">
+          Réessayer
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngIf="!loading && !error && csvData.length === 0" class="error">
+      <mat-card-content>
+        <p>Aucune donnée n'a été trouvée dans le fichier CSV.</p>
+        <p>Vérifiez que le fichier contient des données valides.</p>
+      </mat-card-content>
+    </mat-card>
+
+    <div *ngIf="!loading && !error && csvData.length > 0">
+      <mat-table
+        [dataSource]="currentPageData"
+        class="mat-elevation-z8 spacious-table"
+      >
+        <ng-container *ngFor="let header of headers" [matColumnDef]="header">
+          <mat-header-cell *matHeaderCellDef class="header-cell">
+            <div class="header-content">
+              {{ header | titlecase }}
+            </div>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" class="data-cell">
+            <div class="cell-content" [title]="row[header]">
+              {{ row[header] }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row
+          *matHeaderRowDef="headers"
+          class="header-row"
+        ></mat-header-row>
+        <mat-row
+          *matRowDef="let row; columns: headers"
+          class="data-row"
+        ></mat-row>
+      </mat-table>
+
+      <mat-paginator
+        [length]="csvData.length"
+        [pageSize]="pageSize"
+        [pageIndex]="currentPage - 1"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+        class="mat-elevation-z8"
+      >
+      </mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>
