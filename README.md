@@ -1,59 +1,95 @@
-# LolStats
+# LOL Stats - Analyse de données League of Legends
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+Application web développée avec Angular permettant d'analyser et de visualiser des statistiques de jeux League of Legends pour comprendre les facteurs qui influencent le plus la victoire.
+Les données étant très nombreuses, la visualisation des statistiques peut prendre un peu de temps.
 
-## Development server
+## Fonctionnalités
 
-To start a local development server, run:
+- Analyse complète des données de parties League of Legends
+- Visualisation des statistiques avec des graphiques interactifs (Highcharts)
+- Identification des facteurs clés de victoire
+- Analyse de l'impact des positions (TOP, JUNGLE, MID, BOT, SUPPORT)
+- Statistiques des objets et leur taux de victoire
+- Comparaison des équipes victorieuses et perdantes
+
+## Technologies utilisées
+
+- Angular 19
+- TypeScript
+- RxJS
+- Highcharts (visualisation de données)
+- Angular Material
+- Bootstrap 5
+
+## Installation
+
+Assurez-vous d'avoir Node.js et npm installés sur votre machine.
 
 ```bash
-ng serve
+# Cloner le dépôt
+git clone [https://github.com/l0l0o/lol-stats]
+cd lol-stats
+
+# Installer les dépendances
+npm install
+
+# Démarrer le serveur de développement
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+L'application sera accessible à l'adresse `http://localhost:4200/`.
 
-## Code scaffolding
+## Structure du projet
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- `src/app/dataviz` - Composant principal pour la visualisation des données
+- `src/app/csv-viewer` - Visualisation des données brutes CSV
+- `src/app/team-stats.service.ts` - Service d'analyse des statistiques d'équipe
+- `src/app/csv.service.ts` - Service de traitement des fichiers CSV
+- `src/app/game.service.ts` - Service de gestion des données de jeu
+- `src/assets` - Fichiers de données (dont league-data.csv)
+
+## Développement
+
+Pour générer un nouveau composant :
 
 ```bash
-ng generate component component-name
+ng generate component nom-du-composant
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Pour les autres types d'éléments (services, directives, etc.) :
 
 ```bash
 ng generate --help
 ```
 
-## Building
+## Production
 
-To build the project run:
+Pour compiler l'application pour la production :
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Les fichiers compilés seront stockés dans le dossier `dist/`.
 
-## Running unit tests
+## Tests
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Pour exécuter les tests unitaires :
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## Contribuer
 
-For end-to-end (e2e) testing, run:
+Les contributions sont les bienvenues ! Pour contribuer :
 
-```bash
-ng e2e
-```
+1. Forkez le projet
+2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/ma-fonctionnalite`)
+3. Committez vos changements (`git commit -m 'Ajout de ma fonctionnalité'`)
+4. Poussez vers la branche (`git push origin feature/ma-fonctionnalite`)
+5. Ouvrez une Pull Request
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Licence
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+[À spécifier]
