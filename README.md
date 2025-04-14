@@ -71,25 +71,3 @@ ng build
 ```
 
 Les fichiers compilés seront stockés dans le dossier `dist/`.
-
-## Tests
-
-Pour exécuter les tests unitaires :
-
-```bash
-ng test
-```
-
-## Contribuer
-
-Les contributions sont les bienvenues ! Pour contribuer :
-
-1. Forkez le projet
-2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/ma-fonctionnalite`)
-3. Committez vos changements (`git commit -m 'Ajout de ma fonctionnalité'`)
-4. Poussez vers la branche (`git push origin feature/ma-fonctionnalite`)
-5. Ouvrez une Pull Request
-
-## Licence
-
-[À spécifier]
